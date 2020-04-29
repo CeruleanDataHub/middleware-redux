@@ -1,22 +1,31 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { invokeRequest } from './request.js';
+import dispatchThunk from '../utils.js';
 
 export const getAllDevices = createAsyncThunk(
     'devices/get',
-    async (_, thunk) => {
-        const { payload: { body } } = await thunk.dispatch(invokeRequest({ method: 'get', url: '/api/edge/all' }));
-        return { body };
-    }
+    async (_, thunk) => await dispatchThunk(thunk, invokeRequest({ method: 'get', url: '/api/iot-device/all' }))
+);
+
+export const getTwin = createAsyncThunk(
+    'twin/get',
+    async (id, thunk) => await dispatchThunk(thunk, invokeRequest({ method: 'get', url: `/api/twin/${id}` }))
+);
+
+export const updateTwin = createAsyncThunk(
+    'twin/update',
+    async (data, thunk) => await dispatchThunk(thunk, invokeRequest({ method: 'post', url: `/api/twin/update`, data: data }))
 );
 
 export const devicesSlice = createSlice({
     name: 'devices',
-    initialState: {
-        devices: {}
-    },
+    initialState: { error: undefined },
     extraReducers: {
         [getAllDevices.fulfilled]: (state, action) => {
-            state.devices['all'] = action.payload.body;
+            state.all = action.payload.body;
+        },
+        [getTwin.fulfilled]: (state, action) => {
+            state.twin = action.payload.body;
         }
     },
 });
