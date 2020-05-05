@@ -1,6 +1,6 @@
 {
-  "name": "iot-platform-middleware-redux",
-  "version": "0.1.0",
+  "name": "@denim/iot-platform-middleware-redux",
+  "version": "0.2.0",
   "description": "",
   "main": "middleware.js",
   "scripts": {
