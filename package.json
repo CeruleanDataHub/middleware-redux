@@ -1,8 +1,8 @@
 {
-  "name": "iot-platform-middleware-redux",
-  "version": "0.1.0",
+  "name": "@denim/iot-platform-middleware-redux",
+  "version": "0.2.0",
   "description": "",
-  "main": "index.js",
+  "main": "middleware.js",
   "scripts": {
     "test": "NODE_ENV=development node ./node_modules/.bin/mocha --require @babel/core --require @babel/register --require @babel/polyfill ./test/**/*.js"
   },

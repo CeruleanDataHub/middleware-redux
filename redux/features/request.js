@@ -40,11 +40,13 @@ export const invokeRequest = createAsyncThunk(
         const { method, url } = options;
         const key = makeKey(options);
         const APIurl = makeUrl(thunk.extra.settingsProvider, url);
-        const request = await createRequest(method, APIurl);
-     
-        const { body, error } = request;
-        
-        return { key, body, error };
+        try {
+            const response = await createRequest(method, APIurl, null, null, options.data);
+            const { body, error } = response;
+            return { key, body, error };
+        } catch (err) {
+            return thunk.rejectWithValue({ key, error: err.message  });
+        }
     }
 );
 
