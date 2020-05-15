@@ -4,17 +4,17 @@ import dispatchThunk from '../utils.js';
 
 export const getAllDevices = createAsyncThunk(
     'devices/get',
-    async (_, thunk) => await dispatchThunk(thunk, invokeRequest({ method: 'get', url: '/api/iot-device/all' }))
+    async (_, thunk) => await dispatchThunk(thunk, invokeRequest({ method: 'get', url: '/api/v1/device/all' }))
 );
 
 export const getTwin = createAsyncThunk(
     'twin/get',
-    async (id, thunk) => await dispatchThunk(thunk, invokeRequest({ method: 'get', url: `/api/twin/${id}` }))
+    async (id, thunk) => await dispatchThunk(thunk, invokeRequest({ method: 'get', url: `/api/v1/twin/${id}` }))
 );
 
 export const updateTwin = createAsyncThunk(
     'twin/update',
-    async (data, thunk) => await dispatchThunk(thunk, invokeRequest({ method: 'post', url: `/api/twin/update`, data: data }))
+    async (data, thunk) => await dispatchThunk(thunk, invokeRequest({ method: 'post', url: `/api/v1/twin/update`, data: data }))
 );
 
 export const devicesSlice = createSlice({
