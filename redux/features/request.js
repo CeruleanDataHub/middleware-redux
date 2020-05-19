@@ -7,12 +7,17 @@ const makeKey = request => {
 
 const makeUrl = (settings, url) => `${settings.API_URL}${url}`;
 
-const createRequest = (method, url, subscriptionKey, query, data, options) => {
+const createRequest = (method, url, subscriptionKey, query, data, token, options) => {
     const request = superagent[method](url);
 
     // Set query parameters.
     if (query !== undefined) {
         request.query(query);
+    }
+
+    // Set token if given
+    if (token !== undefined) {
+        request.set('Authorization', `Bearer ${token}`);
     }
 
     // Set subscription key if given.
@@ -40,8 +45,9 @@ export const invokeRequest = createAsyncThunk(
         const { method, url } = options;
         const key = makeKey(options);
         const APIurl = makeUrl(thunk.extra.settingsProvider, url);
+        const token = thunk.extra.sessionProvider.getToken();
         try {
-            const response = await createRequest(method, APIurl, null, null, options.data);
+            const response = await createRequest(method, APIurl, null, null, options.data, token);
             const { body, error } = response;
             return { key, body, error };
         } catch (err) {
