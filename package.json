@@ -1,6 +1,6 @@
 {
   "name": "@denim/iot-platform-middleware-redux",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "",
   "main": "middleware.js",
   "scripts": {
@@ -48,6 +48,7 @@
   "devDependencies": {
     "@babel/plugin-transform-runtime": "^7.9.0",
     "chai": "^4.2.0",
+    "dotenv": "^8.2.0",
     "mocha": "^7.1.1",
     "redux-logger": "^3.0.6"
   }
