@@ -1,81 +1,81 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import superagent from 'superagent';
 
-const makeKey = request => {
-    return JSON.stringify(request);
-}
+const makeKey = (request) => {
+  return JSON.stringify(request);
+};
 
 const makeUrl = (settings, url) => `${settings.API_URL}${url}`;
 
-const createRequest = (method, url, subscriptionKey, query, data, token, options) => {
-    const request = superagent[method](url);
+const createRequest = (method, url, subscriptionKey, query, data, token, options, tenant) => {
+  const request = superagent[method](url);
 
-    // Set query parameters.
-    if (query !== undefined) {
-        request.query(query);
-    }
+  // Set query parameters.
+  if (query !== undefined) {
+    request.query(query);
+  }
 
-    // Set token if given
-    if (token !== undefined) {
-        request.set('Authorization', `Bearer ${token}`);
-    }
+  // Set token if given
+  if (token !== undefined) {
+    request.set('Authorization', `Bearer ${token}`);
+  }
+  if (tenant !== undefined) {
+    request.set('x-cerulean-context', tenant);
+  }
+  // Set subscription key if given.
+  if (subscriptionKey !== undefined) {
+    request.set('Ocp-Apim-Subscription-Key', subscriptionKey);
+  }
 
-    // Set subscription key if given.
-    if (subscriptionKey !== undefined) {
-        request.set('Ocp-Apim-Subscription-Key', subscriptionKey);
-    }
+  // Send form data encoded as JSON if available.
+  if (data !== undefined) {
+    request.type('json');
+    request.send(data);
+  }
 
-    // Send form data encoded as JSON if available.
-    if (data !== undefined) {
-        request.type('json');
-        request.send(data);
-    }
+  // Check if response type should be set to blob. Note that request type is always JSON and caller cannot change it.
+  if (options !== undefined && options.isBlob === true) {
+    request.responseType('blob');
+  }
 
-    // Check if response type should be set to blob. Note that request type is always JSON and caller cannot change it.
-    if (options !== undefined && options.isBlob === true) {
-        request.responseType('blob');
-    }
+  return request;
+};
 
-    return request;
-}
-
-export const invokeRequest = createAsyncThunk(
-    'request/invoke',
-    async (options, thunk) => {
-        const { method, url } = options;
-        const key = makeKey(options);
-        const APIurl = makeUrl(thunk.extra.settingsProvider, url);
-        const token = thunk.extra.sessionProvider.getToken();
-        try {
-            const response = await createRequest(method, APIurl, null, null, options.data, token);
-            const { body, error } = response;
-            return { key, body, error };
-        } catch (err) {
-            return thunk.rejectWithValue({ key, error: err.message  });
-        }
-    }
-);
+export const invokeRequest = createAsyncThunk('request/invoke', async (options, thunk) => {
+  const { method, url } = options;
+  const key = makeKey(options);
+  const APIurl = makeUrl(thunk.extra.settingsProvider, url);
+  const token = thunk.extra.sessionProvider.getToken();
+  const tenant = thunk.extra.sessionProvider.getTenant();
+  try {
+    const response = await createRequest(method, APIurl, null, null, options.data, token, undefined, tenant);
+    const { body, error } = response;
+    return { key, body, error };
+  } catch (err) {
+    return thunk.rejectWithValue({ key, error: err.message });
+  }
+});
 
 export const requestSlice = createSlice({
-    name: 'requests',
-    initialState: {
-        onGoingRequests: {},
-        requestsCache: {},
-        requestFail: {}
+  name: 'requests',
+  initialState: {
+    onGoingRequests: {},
+    requestsCache: {},
+    requestFail: {},
+  },
+  extraReducers: {
+    [invokeRequest.pending]: (state, action) => {
+      state.onGoingRequests[action.meta.requestId] = action.meta.arg;
     },
-    extraReducers: {
-        [invokeRequest.pending]: (state, action) => {
-            state.onGoingRequests[action.meta.requestId] = action.meta.arg;
-        },
-        [invokeRequest.fulfilled]: (state, action) => {
-            delete state.onGoingRequests[action.meta.requestId];
-            state.requestsCache[action.payload.key] = action.payload.body;
-        },
-        [invokeRequest.rejected]: (state, action) => {
-            delete state.onGoingRequests[action.meta.requestId];
-            state.requestFail[action.payload.key] = action.payload.error;
-        },
+    [invokeRequest.fulfilled]: (state, action) => {
+      delete state.onGoingRequests[action.meta.requestId];
+      state.requestsCache[action.payload.key] = action.payload.body;
     },
+    [invokeRequest.rejected]: (state, action) => {
+      delete state.onGoingRequests[action.meta.requestId];
+      state.requestFail[action.payload.key] = action.payload.error;
+    },
+  },
 });
 
 // The function below is called a selector and allows us to select a value from
