@@ -9,6 +9,8 @@ export {
   setHierarchyTree,
   editHierarchy,
 } from './redux/features/hierarchy.js';
+export { default as telemetryReducer, postTelemetryQuery, latestTelemetry } from './redux/features/telemetry.js';
+
 export { Auth0SessionProvider } from './redux/providers/auth0SessionProvider.js';
 
 export default function (settingsProvider, cacheProvider, sessionProvider) {
