@@ -7,6 +7,11 @@ export const getAllDevices = createAsyncThunk(
   async (_, thunk) => await dispatchThunk(thunk, invokeRequest({ method: 'get', url: '/device/all' }))
 );
 
+export const findDevices = createAsyncThunk(
+  'devices/find',
+  async (data, thunk) => await dispatchThunk(thunk, invokeRequest({ method: 'post', url: '/device/find-where', data: data }))
+);
+
 export const getTwin = createAsyncThunk(
   'twin/get',
   async (id, thunk) => await dispatchThunk(thunk, invokeRequest({ method: 'get', url: `/twin/${id}` }))
@@ -27,6 +32,12 @@ export const devicesSlice = createSlice({
     [getTwin.fulfilled]: (state, action) => {
       state.twin = action.payload.body;
     },
+    [findDevices.fulfilled]: (state, action) => {
+      state.devices = action.payload.body
+    },
+    [findDevices.rejected]: (state, action) => {
+      state.devices = null
+    }
   },
 });
 

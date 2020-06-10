@@ -12,6 +12,11 @@ export const getHierarchyTree = createAsyncThunk(
   async (_, thunk) => await dispatchThunk(thunk, invokeRequest({ method: 'get', url: '/hierarchy/tree' }))
 );
 
+export const findHierarchies = createAsyncThunk(
+  'hierarchy/find',
+  async (data, thunk) => await dispatchThunk(thunk, invokeRequest({ method: 'post', url: '/hierarchy/find-where', data: data }))
+);
+
 export const addHierarchy = createAsyncThunk(
   'hierarchy/add',
   async (data, thunk) => await dispatchThunk(thunk, invokeRequest({ method: 'post', url: '/hierarchy/', data: data }))
@@ -42,6 +47,12 @@ export const hierarchiesSlice = createSlice({
     },
     [getHierarchyTree.fulfilled]: (state, action) => {
       state.tree = action.payload.body;
+    },
+    [findHierarchies.fulfilled]: (state, action) => {
+      state.hierarchies = action.payload.body
+    },
+    [findHierarchies.rejected]: (state, action) => {
+      state.hierarchies = null
     },
     [deleteHierarchy.rejected]: (state, action) => {
       return action;

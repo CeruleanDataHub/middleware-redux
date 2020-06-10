@@ -1,5 +1,11 @@
 import { getDefaultMiddleware } from '@reduxjs/toolkit';
-export { default as devicesReducer, getAllDevices, getTwin, updateTwin } from './redux/features/devices.js';
+export { 
+  default as devicesReducer, 
+  getAllDevices, 
+  findDevices,
+  getTwin, 
+  updateTwin 
+} from './redux/features/devices.js';
 export {
   default as hierarchyReducer,
   getAllHierarchies,
@@ -8,8 +14,13 @@ export {
   deleteHierarchy,
   setHierarchyTree,
   editHierarchy,
+  findHierarchies
 } from './redux/features/hierarchy.js';
-export { default as telemetryReducer, postTelemetryQuery, latestTelemetry } from './redux/features/telemetry.js';
+export { 
+  default as telemetryReducer, 
+  postTelemetryQuery, 
+  latestTelemetry 
+} from './redux/features/telemetry.js';
 
 export { Auth0SessionProvider } from './redux/providers/auth0SessionProvider.js';
 

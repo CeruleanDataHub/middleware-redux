@@ -4,8 +4,8 @@ import { configureStore } from '@reduxjs/toolkit';
 import denimMiddleware from '../middleware.js';
 
 import requestReducer from '../redux/features/request.js';
-import devicesReducer, { getAllDevices, getTwin } from '../redux/features/devices.js';
-import hierarchiesReducer, { getAllHierarchies, getHierarchyTree } from '../redux/features/hierarchy.js';
+import devicesReducer, { getAllDevices, getTwin, findDevices } from '../redux/features/devices.js';
+import hierarchiesReducer, { getAllHierarchies, getHierarchyTree, findHierarchies } from '../redux/features/hierarchy.js';
 
 import superagent from 'superagent';
 import { Auth0SessionProvider } from '../redux/providers/auth0SessionProvider.js';
@@ -46,6 +46,40 @@ describe('Devices', () => {
     expect(response.payload.error).to.be.null;
     expect(store.getState().devices.all).not.to.be.empty;
     expect(response.payload.body).to.equal(store.getState().devices.all);
+  });
+
+  it('should find devices by query', async function() {
+
+    const store = createStore();
+
+    const query = {
+      select: [ "id", "name", "type"],
+      where: {
+        type: "node"
+      }
+    }
+    const response = await store.dispatch(findDevices(query));
+
+    expect(response.payload.body).not.to.be.empty;
+    expect(response.payload.error).to.be.null;
+    expect(store.getState().devices.devices).not.to.be.empty;
+    expect(response.payload.body).to.equal(store.getState().devices.devices);
+  });
+
+  it('should return empty list when no devices found', async function() {
+    const store = createStore();
+
+    const query = {
+      select: [ "id", "name", "type"],
+      where: {
+        name: "doesNotExist"
+      }
+    }
+    const response = await store.dispatch(findDevices(query));
+
+    expect(response.payload.body).to.eql([]);
+    expect(response.payload.error).to.be.null;
+    expect(store.getState().devices.devices).to.eql([]);
   });
 
   it('should get twin', async function () {
@@ -117,6 +151,39 @@ describe('Hierarchy', () => {
     expect(Array.isArray(response.payload.body)).to.be.true;
     expect(response.payload.body.length).to.equal(1);
   });
+
+  it('should find hierarchies by query', async function() {
+
+    const store = createStore();
+
+    const query = {
+      select: [ "id", "name"],
+      where: { id: "2" }
+    }
+    const response = await store.dispatch(findHierarchies(query));
+
+    expect(response.payload.body).not.to.be.empty;
+    expect(response.payload.error).to.be.null;
+    expect(store.getState().hierarchies.hierarchies).not.to.be.empty;
+    expect(response.payload.body).to.equal(store.getState().hierarchies.hierarchies);
+  });
+
+  it('should return empty list when no hierarchies found', async function() {
+    const store = createStore();
+
+    const query = {
+      select: [ "id", "name" ],
+      where: {
+        name: "doesNotExist"
+      }
+    }
+    const response = await store.dispatch(findHierarchies(query));
+
+    expect(response.payload.body).to.eql([]);
+    expect(response.payload.error).to.be.null;
+    expect(store.getState().hierarchies.hierarchies).to.eql([]);
+  });
+
 
   it('should return error on network errors', async function () {
     const invalidSettingsProvider = {
