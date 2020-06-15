@@ -4,8 +4,20 @@ import { configureStore } from '@reduxjs/toolkit';
 import denimMiddleware from '../middleware.js';
 
 import requestReducer from '../redux/features/request.js';
-import devicesReducer, { getAllDevices, getTwin, findDevices } from '../redux/features/devices.js';
-import hierarchiesReducer, { getAllHierarchies, getHierarchyTree, findHierarchies } from '../redux/features/hierarchy.js';
+import devicesReducer, {
+  getAllDevices,
+  getTwin,
+  findDevices,
+  updateTwin
+} from '../redux/features/devices.js';
+import hierarchiesReducer, {
+  getAllHierarchies,
+  getHierarchyTree,
+  findHierarchies,
+  addHierarchy,
+  editHierarchy,
+  deleteHierarchy
+} from '../redux/features/hierarchy.js';
 
 import superagent from 'superagent';
 import { Auth0SessionProvider } from '../redux/providers/auth0SessionProvider.js';
@@ -94,7 +106,7 @@ describe('Devices', () => {
     expect(response.payload.body).to.equal(store.getState().devices.twin);
   });
 
-  it('should return error on 404', async function () {
+  it('should return error on 404 when getting twin', async function () {
     const store = createStore();
     const response = await store.dispatch(getTwin('invalid'));
 
@@ -103,7 +115,7 @@ describe('Devices', () => {
     expect(store.getState().twin).to.be.undefined;
   });
 
-  it('should return error on network errors', async function () {
+  it('should return error on network errors when getting twin', async function () {
     const invalidSettingsProvider = {
       API_URL: 'http://invalid:2121',
     };
@@ -119,6 +131,46 @@ describe('Devices', () => {
     expect(response.payload.error).to.not.be.empty;
     expect(response.payload.body).to.be.null;
     expect(storeWithInvalidSettings.getState().twin).to.be.undefined;
+  });
+
+  it('should update twins desired properties', async function() {
+    const store = createStore();
+
+    const deviceId = 'c5:4c:cb:2d:b0:f5';
+
+    const twin1 = {
+      id: deviceId,
+      state: {
+        properties: {
+          desired: {
+            testProperty: 'added in test'
+          }
+        }
+      }
+    }
+
+    await store.dispatch(updateTwin(twin1));
+
+    const response = await store.dispatch(getTwin(deviceId));
+
+    expect(response.payload.body.properties.desired.testProperty).to.equal('added in test');
+
+    const twin2 = {
+      id: deviceId,
+      state: {
+        properties: {
+          desired: {
+            testProperty: null
+          }
+        }
+      }
+    }
+
+    await store.dispatch(updateTwin(twin2));
+
+    const response2 = await store.dispatch(getTwin(deviceId));
+    
+    expect(response2.payload.body.properties.desired.testProperty).to.be.undefined;
   });
 });
 
@@ -184,7 +236,6 @@ describe('Hierarchy', () => {
     expect(store.getState().hierarchies.hierarchies).to.eql([]);
   });
 
-
   it('should return error on network errors', async function () {
     const invalidSettingsProvider = {
       API_URL: 'http://invalid:2121',
@@ -202,6 +253,66 @@ describe('Hierarchy', () => {
     expect(response.payload.body).to.be.null;
     expect(storeWithInvalidSettings.getState().twin).to.be.undefined;
   });
+
+  it('should insert new hierarchy', async function() {
+    const store = createStore();
+
+    const testHierarchy = {
+      parent_id: 1,
+      name: 'inserted in test',
+      type: 'test'
+    }
+
+    const response = await store.dispatch(addHierarchy(testHierarchy));
+
+    expect(response.payload.body).not.to.be.empty;
+    expect(response.payload.body.name).to.equal(testHierarchy.name);
+  });
+
+  it('should update hierarchy', async function() {
+    const store = createStore();
+
+    const response = await store.dispatch(findHierarchies({ type: 'test' }));
+    const testHierarchy = response.payload.body[0];
+
+    expect(testHierarchy.name).to.equal('inserted in test');
+
+    await store.dispatch(editHierarchy({ 
+      id: testHierarchy.id, 
+      name: 'updated in test'
+    }));
+
+    const response2 = await store.dispatch(findHierarchies({ id: testHierarchy.id }));
+    const updatedTestHierarchy = response2.payload.body[0];
+
+    expect(updatedTestHierarchy.name).to.equal('updated in test');
+  });
+  
+  // Deletes all 'test' type hierarchies
+  it('should delete hierarchy', async function() {
+    const store = createStore();
+
+    const response = await store.dispatch(findHierarchies({
+      type: 'test'
+    }));
+
+    expect(response.payload.body).not.to.be.empty;
+
+    const testHierarchies = response.payload.body;
+
+    const deletePromises = testHierarchies.map((h) => {
+      return store.dispatch(deleteHierarchy(h.id));
+    });
+
+    await Promise.all(deletePromises);
+
+    const response2 = await store.dispatch(findHierarchies({
+      type: 'test'
+    }));
+
+    expect(response2.payload.body).to.be.empty;
+  });
+
 });
 
 const initAuth0Token = (sessionProvider) => {
