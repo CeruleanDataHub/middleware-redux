@@ -5,8 +5,8 @@
 Create .env file in the project root with the following content:
 
 ```
-API_BASE_URL=https://ddh-api.azure-api.net
-AUTH0_OAUTH_TOKEN_URL=https://denim-data-hub.eu.auth0.com/oauth/token
+API_BASE_URL=https://ddh-api.azure-api.net/api/v1
+AUTH0_OAUTH_TOKEN_URL=https://cerulean-data-hub.eu.auth0.com/oauth/token
 AUTH0_CLIENT_ID=<Auth0 client ID>
 AUTH0_CLIENT_SECRET=<Auth0 client secret>
 AUTH0_AUDIENCE=https://ddh-api.azure-api.net
