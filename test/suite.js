@@ -21,6 +21,9 @@ import hierarchiesReducer, {
 
 import superagent from 'superagent';
 import { Auth0SessionProvider } from '../redux/providers/auth0SessionProvider.js';
+import identityEventReducer, {
+  getLatestIdenties
+} from '../redux/features/identityEvent.js';
 
 require('dotenv').config();
 
@@ -39,6 +42,7 @@ const createStore = () =>
       requests: requestReducer,
       devices: devicesReducer,
       hierarchies: hierarchiesReducer,
+      identityEvents: identityEventReducer
     },
     middleware: [...denimMiddleware(settingsProvider, cacheProvider, sessionProvider), logger],
   });
@@ -169,7 +173,7 @@ describe('Devices', () => {
     await store.dispatch(updateTwin(twin2));
 
     const response2 = await store.dispatch(getTwin(deviceId));
-    
+
     expect(response2.payload.body.properties.desired.testProperty).to.be.undefined;
   });
 });
@@ -277,8 +281,8 @@ describe('Hierarchy', () => {
 
     expect(testHierarchy.name).to.equal('inserted in test');
 
-    await store.dispatch(editHierarchy({ 
-      id: testHierarchy.id, 
+    await store.dispatch(editHierarchy({
+      id: testHierarchy.id,
       name: 'updated in test'
     }));
 
@@ -287,7 +291,7 @@ describe('Hierarchy', () => {
 
     expect(updatedTestHierarchy.name).to.equal('updated in test');
   });
-  
+
   // Deletes all 'test' type hierarchies
   it('should delete hierarchy', async function() {
     const store = createStore();
@@ -312,7 +316,19 @@ describe('Hierarchy', () => {
 
     expect(response2.payload.body).to.be.empty;
   });
+});
 
+describe('Identity events', () => {
+
+  it('should get latest identity events', async function () {
+    const store = createStore();
+    const response = await store.dispatch(getLatestIdenties());
+    expect(response.payload.body).not.to.be.empty;
+    expect(response.payload.error).to.be.null;
+    expect(store.getState().identityEvents.latest).not.to.be.empty;
+    expect(response.payload.body).to.equal(store.getState().identityEvents.latest);
+    expect(Array.isArray(response.payload.body)).to.be.true;
+  });
 });
 
 const initAuth0Token = (sessionProvider) => {
