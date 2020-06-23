@@ -1,6 +1,6 @@
 {
-  "name": "@denim/iot-platform-middleware-redux",
-  "version": "0.7.0",
+  "name": "@ceruleandatahub/middleware-redux",
+  "version": "0.8.0",
   "description": "",
   "main": "middleware.js",
   "scripts": {
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DenimDataHub/iot-platform-middleware-redux.git"
+    "url": "git+https://github.com/CeruleanDataHub/middleware-redux.git"
   },
   "author": "Antti Rintala <rintsi@gmail.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/DenimDataHub/iot-platform-middleware-redux/issues"
+    "url": "https://github.com/CeruleanDataHub/middleware-redux/issues"
   },
-  "homepage": "https://github.com/DenimDataHub/iot-platform-middleware-redux#readme",
+  "homepage": "https://github.com/CeruleanDataHub/middleware-redux#readme",
   "babel": {
     "env": {
       "development": {
