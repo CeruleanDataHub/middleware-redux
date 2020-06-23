@@ -1,4 +1,4 @@
-# iot-platform-middleware-redux
+# Redux-middeware for Cerulean Data Hub
 
 ## Tests
 
