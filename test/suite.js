@@ -22,7 +22,7 @@ import hierarchiesReducer, {
 import superagent from 'superagent';
 import { Auth0SessionProvider } from '../redux/providers/auth0SessionProvider.js';
 import identityEventReducer, {
-  getLatestIdenties
+  getLatestIdentities
 } from '../redux/features/identityEvent.js';
 
 require('dotenv').config();
@@ -322,7 +322,7 @@ describe('Identity events', () => {
 
   it('should get latest identity events', async function () {
     const store = createStore();
-    const response = await store.dispatch(getLatestIdenties());
+    const response = await store.dispatch(getLatestIdentities());
     expect(response.payload.body).not.to.be.empty;
     expect(response.payload.error).to.be.null;
     expect(store.getState().identityEvents.latest).not.to.be.empty;
