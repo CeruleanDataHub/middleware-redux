@@ -62,6 +62,5 @@ export const hierarchiesSlice = createSlice({
     },
   },
 });
-export const { saveHierarchies } = hierarchiesSlice.actions;
 
 export default hierarchiesSlice.reducer;
