@@ -24,6 +24,10 @@ import { Auth0SessionProvider } from '../redux/providers/auth0SessionProvider.js
 import identityEventReducer, {
   getLatestIdentities
 } from '../redux/features/identityEvent.js';
+import telemetryReducer, {
+  telemetryQuery,
+  aggregateTelemetryQuery
+} from '../redux/features/telemetry.js';
 
 require('dotenv').config();
 
@@ -42,10 +46,52 @@ const createStore = () =>
       requests: requestReducer,
       devices: devicesReducer,
       hierarchies: hierarchiesReducer,
-      identityEvents: identityEventReducer
+      identityEvents: identityEventReducer,
+      telemetry: telemetryReducer
     },
     middleware: [...denimMiddleware(settingsProvider, cacheProvider, sessionProvider), logger],
   });
+
+describe('Telemetry', () => {
+  before(() => {
+    return initAuth0Token(sessionProvider);
+  });
+
+  it('should return telemetry data', async () => {
+    const store = createStore();
+
+    const query = {
+      deviceId: 4,
+      sensorName: 'temperature',
+      limit: 2
+    }
+    
+    const response = await store.dispatch(telemetryQuery(query));
+
+    expect(response.payload.body).not.to.be.empty;
+    expect(response.payload.error).to.be.null;
+    expect(store.getState().telemetry.queryResult).not.to.be.empty;
+    expect(response.payload.body).to.equal(store.getState().telemetry.queryResult);
+  });
+
+  it('should return aggregate telemetry data', async () => {
+    const store = createStore();
+
+    const query = {
+      deviceId: 4,
+      sensorName: 'temperature',
+      limit: 2,
+      type: 'DAILY'
+    }
+    
+    const response = await store.dispatch(aggregateTelemetryQuery(query));
+
+    expect(response.payload.body).not.to.be.empty;
+    expect(response.payload.error).to.be.null;
+    expect(store.getState().telemetry.queryResult).not.to.be.empty;
+    expect(response.payload.body).to.equal(store.getState().telemetry.queryResult);
+  });
+});
 
 describe('Devices', () => {
   before(() => {

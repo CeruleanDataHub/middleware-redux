@@ -18,8 +18,8 @@ export {
 } from './redux/features/hierarchy.js';
 export {
   default as telemetryReducer,
-  postTelemetryQuery,
-  latestTelemetry
+  telemetryQuery,
+  aggregateTelemetryQuery
 } from './redux/features/telemetry.js';
 export {
   default as identityEventReducer,

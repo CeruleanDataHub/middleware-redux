@@ -2,24 +2,30 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { invokeRequest } from './request.js';
 import dispatchThunk from '../utils.js';
 
-export const postTelemetryQuery = createAsyncThunk('telemetry/telemetry-query', async (data, thunk) => {
-  return await dispatchThunk(thunk, invokeRequest({ method: 'post', url: `/telemetry/telemetry-query`, data: data }));
+export const telemetryQuery = createAsyncThunk('telemetry/telemetry-query', async (data, thunk) => {
+  return await dispatchThunk(thunk, invokeRequest({ method: 'post', url: `/telemetry/query`, data: data }));
 });
 
-export const latestTelemetry = createAsyncThunk('telemetry/telemetry-latest', async (data, thunk) => {
-  return await dispatchThunk(thunk, invokeRequest({ method: 'post', url: `/telemetry/telemetry-latest`, data: data }));
+export const aggregateTelemetryQuery = createAsyncThunk('telemetry/aggregate-telemetry-query', async (data, thunk) => {
+  return await dispatchThunk(thunk, invokeRequest({ method: 'post', url: `/telemetry/query-aggregate`, data: data }));
 });
 
 export const telemetrySlice = createSlice({
   name: 'telemetry',
   initialState: { error: undefined },
   extraReducers: {
-    [postTelemetryQuery.fulfilled]: (state, action) => {
-      state.all = action.payload.body;
+    [telemetryQuery.fulfilled]: (state, action) => {
+      state.queryResult = action.payload.body;
     },
-    [latestTelemetry.fulfilled]: (state, action) => {
-      state.latest = action.payload.body;
+    [telemetryQuery.rejected]: (state, action) => {
+      state.queryResult = null;
     },
+    [aggregateTelemetryQuery.fulfilled]: (state, action) => {
+      state.queryResult = action.payload.body;
+    },
+    [aggregateTelemetryQuery.rejected]: (state, action) => {
+      state.queryResult = null;
+    }
   },
 });
 
