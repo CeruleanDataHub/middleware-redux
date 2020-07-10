@@ -9,7 +9,6 @@ const makeUrl = (settings, url) => `${settings.API_URL}${url}`;
 
 const createRequest = (method, url, subscriptionKey, query, data, token, options, tenant) => {
   const request = superagent[method](url);
-
   // Set query parameters.
   if (query !== undefined) {
     request.query(query);

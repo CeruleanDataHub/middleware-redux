@@ -26,6 +26,12 @@ export {
   getLatestIdentities
 } from './redux/features/identityEvent.js';
 
+export {
+  default as activityReducer,
+  getLastMonthKPIData,
+  getCurrentMonthKPIData,
+} from './redux/features/userActivity.js';
+
 export { Auth0SessionProvider } from './redux/providers/auth0SessionProvider.js';
 
 export default function (settingsProvider, cacheProvider, sessionProvider) {
