@@ -1,6 +1,6 @@
 {
   "name": "@ceruleandatahub/middleware-redux",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "",
   "main": "middleware.js",
   "scripts": {
