@@ -9,7 +9,8 @@ export const getAllDevices = createAsyncThunk(
 
 export const findDevices = createAsyncThunk(
   'devices/find',
-  async (data, thunk) => await dispatchThunk(thunk, invokeRequest({ method: 'post', url: '/device/find-where', data: data }))
+  async (data, thunk) =>
+    await dispatchThunk(thunk, invokeRequest({ method: 'post', url: '/device/find-where', data: data }))
 );
 
 export const getTwin = createAsyncThunk(
@@ -22,6 +23,14 @@ export const updateTwin = createAsyncThunk(
   async (data, thunk) => await dispatchThunk(thunk, invokeRequest({ method: 'post', url: `/twin/update`, data: data }))
 );
 
+export const getLastMonthDevicesKPIData = createAsyncThunk('device/device-activity/last', async (data, thunk) => {
+  return await dispatchThunk(thunk, invokeRequest({ method: 'post', url: '/device/device-activity', data: data }));
+});
+
+export const getCurrentMonthDevicesKPIData = createAsyncThunk('device/device-activity/current', async (data, thunk) => {
+  return await dispatchThunk(thunk, invokeRequest({ method: 'post', url: '/device/device-activity', data: data }));
+});
+
 export const devicesSlice = createSlice({
   name: 'devices',
   initialState: { error: undefined },
@@ -33,11 +42,17 @@ export const devicesSlice = createSlice({
       state.twin = action.payload.body;
     },
     [findDevices.fulfilled]: (state, action) => {
-      state.devices = action.payload.body
+      state.devices = action.payload.body;
     },
     [findDevices.rejected]: (state, action) => {
-      state.devices = null
-    }
+      state.devices = null;
+    },
+    [getLastMonthDevicesKPIData.fulfilled]: (state, action) => {
+      state.lastMonthKPIData = action.payload.body;
+    },
+    [getCurrentMonthDevicesKPIData.fulfilled]: (state, action) => {
+      state.currentMonthKPIData = action.payload.body;
+    },
   },
 });
 

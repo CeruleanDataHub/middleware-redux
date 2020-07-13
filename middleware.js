@@ -4,7 +4,9 @@ export {
   getAllDevices,
   findDevices,
   getTwin,
-  updateTwin
+  updateTwin,
+  getLastMonthDevicesKPIData,
+  getCurrentMonthDevicesKPIData,
 } from './redux/features/devices.js';
 export {
   default as hierarchyReducer,
@@ -14,22 +16,15 @@ export {
   deleteHierarchy,
   setHierarchyTree,
   editHierarchy,
-  findHierarchies
+  findHierarchies,
 } from './redux/features/hierarchy.js';
-export {
-  default as telemetryReducer,
-  telemetryQuery,
-  aggregateTelemetryQuery
-} from './redux/features/telemetry.js';
-export {
-  default as identityEventReducer,
-  getLatestIdentities
-} from './redux/features/identityEvent.js';
+export { default as telemetryReducer, telemetryQuery, aggregateTelemetryQuery } from './redux/features/telemetry.js';
+export { default as identityEventReducer, getLatestIdentities } from './redux/features/identityEvent.js';
 
 export {
   default as activityReducer,
-  getLastMonthKPIData,
-  getCurrentMonthKPIData,
+  getLastMonthUsersKPIData,
+  getCurrentMonthUsersKPIData,
 } from './redux/features/userActivity.js';
 
 export { Auth0SessionProvider } from './redux/providers/auth0SessionProvider.js';
