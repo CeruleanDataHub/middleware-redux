@@ -25,6 +25,7 @@ export {
   default as activityReducer,
   getLastMonthUsersKPIData,
   getCurrentMonthUsersKPIData,
+  getMaxUserLoginCountInADay,
 } from './redux/features/userActivity.js';
 
 export { Auth0SessionProvider } from './redux/providers/auth0SessionProvider.js';

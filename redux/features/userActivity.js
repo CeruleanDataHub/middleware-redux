@@ -19,6 +19,13 @@ export const getCurrentMonthUsersKPIData = createAsyncThunk(
   }
 );
 
+export const getMaxUserLoginCountInADay = createAsyncThunk(
+  'identity-event/user-activity/max-user-login-count-in-a-day',
+  async (_, thunk) => {
+    return await dispatchThunk(thunk, invokeRequest({ method: 'get', url: '/identity-event/day-max-login-count' }));
+  }
+);
+
 export const userActivitySlice = createSlice({
   name: 'userActivity',
   initialState: { error: undefined },
@@ -28,6 +35,9 @@ export const userActivitySlice = createSlice({
     },
     [getCurrentMonthUsersKPIData.fulfilled]: (state, action) => {
       state.currentMonthKPIData = action.payload.body;
+    },
+    [getMaxUserLoginCountInADay.fulfilled]: (state, action) => {
+      state.maxUserLoginCountInADay = action.payload.body;
     },
   },
 });
