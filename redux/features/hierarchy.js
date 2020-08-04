@@ -4,27 +4,38 @@ import dispatchThunk from '../utils.js';
 
 export const getAllHierarchies = createAsyncThunk(
   'hierarchy/get',
-  async (_, thunk) => await dispatchThunk(thunk, invokeRequest({ method: 'get', url: '/hierarchy/all' }))
+  async (_, thunk) =>
+    await dispatchThunk(thunk, invokeRequest({ method: 'get', url: '/hierarchy/all', prefixKey: 'API_PREFIX' }))
 );
 
 export const getHierarchyTree = createAsyncThunk(
   'hierarchy/tree',
-  async (_, thunk) => await dispatchThunk(thunk, invokeRequest({ method: 'get', url: '/hierarchy/tree' }))
+  async (_, thunk) =>
+    await dispatchThunk(thunk, invokeRequest({ method: 'get', url: '/hierarchy/tree', prefixKey: 'API_PREFIX' }))
 );
 
 export const findHierarchies = createAsyncThunk(
   'hierarchy/find',
-  async (data, thunk) => await dispatchThunk(thunk, invokeRequest({ method: 'post', url: '/hierarchy/find-where', data: data }))
+  async (data, thunk) =>
+    await dispatchThunk(
+      thunk,
+      invokeRequest({ method: 'post', url: '/hierarchy/find-where', data: data, prefixKey: 'API_PREFIX' })
+    )
 );
 
 export const addHierarchy = createAsyncThunk(
   'hierarchy/add',
-  async (data, thunk) => await dispatchThunk(thunk, invokeRequest({ method: 'post', url: '/hierarchy/', data: data }))
+  async (data, thunk) =>
+    await dispatchThunk(
+      thunk,
+      invokeRequest({ method: 'post', url: '/hierarchy/', data: data, prefixKey: 'API_PREFIX' })
+    )
 );
 
 export const deleteHierarchy = createAsyncThunk(
   'hierarchy/delete',
-  async (id, thunk) => await dispatchThunk(thunk, invokeRequest({ method: 'delete', url: `/hierarchy/${id}` }))
+  async (id, thunk) =>
+    await dispatchThunk(thunk, invokeRequest({ method: 'delete', url: `/hierarchy/${id}`, prefixKey: 'API_PREFIX' }))
 );
 
 export const editHierarchy = createAsyncThunk(
@@ -32,7 +43,12 @@ export const editHierarchy = createAsyncThunk(
   async (hierarchy, thunk) =>
     await dispatchThunk(
       thunk,
-      invokeRequest({ method: 'put', url: `/hierarchy/${hierarchy.id}`, data: { name: hierarchy.name } })
+      invokeRequest({
+        method: 'put',
+        url: `/hierarchy/${hierarchy.id}`,
+        data: { name: hierarchy.name },
+        prefixKey: 'API_PREFIX',
+      })
     )
 );
 
@@ -49,10 +65,10 @@ export const hierarchiesSlice = createSlice({
       state.tree = action.payload.body;
     },
     [findHierarchies.fulfilled]: (state, action) => {
-      state.hierarchies = action.payload.body
+      state.hierarchies = action.payload.body;
     },
     [findHierarchies.rejected]: (state, action) => {
-      state.hierarchies = null
+      state.hierarchies = null;
     },
     [deleteHierarchy.rejected]: (state, action) => {
       return action;

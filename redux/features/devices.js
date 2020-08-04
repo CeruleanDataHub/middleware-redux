@@ -4,31 +4,46 @@ import dispatchThunk from '../utils.js';
 
 export const getAllDevices = createAsyncThunk(
   'devices/get',
-  async (_, thunk) => await dispatchThunk(thunk, invokeRequest({ method: 'get', url: '/device/all' }))
+  async (_, thunk) =>
+    await dispatchThunk(thunk, invokeRequest({ method: 'get', url: '/device/all', prefixKey: 'API_PREFIX' }))
 );
 
 export const findDevices = createAsyncThunk(
   'devices/find',
   async (data, thunk) =>
-    await dispatchThunk(thunk, invokeRequest({ method: 'post', url: '/device/find-where', data: data }))
+    await dispatchThunk(
+      thunk,
+      invokeRequest({ method: 'post', url: '/device/find-where', data: data, prefixKey: 'API_PREFIX' })
+    )
 );
 
 export const getTwin = createAsyncThunk(
   'twin/get',
-  async (id, thunk) => await dispatchThunk(thunk, invokeRequest({ method: 'get', url: `/twin/${id}` }))
+  async (id, thunk) =>
+    await dispatchThunk(thunk, invokeRequest({ method: 'get', url: `/twin/${id}`, prefixKey: 'API_PREFIX' }))
 );
 
 export const updateTwin = createAsyncThunk(
   'twin/update',
-  async (data, thunk) => await dispatchThunk(thunk, invokeRequest({ method: 'post', url: `/twin/update`, data: data }))
+  async (data, thunk) =>
+    await dispatchThunk(
+      thunk,
+      invokeRequest({ method: 'post', url: `/twin/update`, data: data, prefixKey: 'API_PREFIX' })
+    )
 );
 
 export const getLastMonthDevicesKPIData = createAsyncThunk('device/device-activity/last', async (data, thunk) => {
-  return await dispatchThunk(thunk, invokeRequest({ method: 'post', url: '/device/device-activity', data: data }));
+  return await dispatchThunk(
+    thunk,
+    invokeRequest({ method: 'post', url: '/device/device-activity', data: data, prefixKey: 'API_PREFIX' })
+  );
 });
 
 export const getCurrentMonthDevicesKPIData = createAsyncThunk('device/device-activity/current', async (data, thunk) => {
-  return await dispatchThunk(thunk, invokeRequest({ method: 'post', url: '/device/device-activity', data: data }));
+  return await dispatchThunk(
+    thunk,
+    invokeRequest({ method: 'post', url: '/device/device-activity', data: data, prefixKey: 'API_PREFIX' })
+  );
 });
 
 export const devicesSlice = createSlice({

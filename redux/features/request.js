@@ -5,7 +5,7 @@ const makeKey = (request) => {
   return JSON.stringify(request);
 };
 
-const makeUrl = (settings, url) => `${settings.API_URL}${url}`;
+const makeUrl = (settings, prefixKey, url) => `${settings.API_URL}${settings[prefixKey]}${url}`;
 
 const createRequest = (method, url, subscriptionKey, query, data, token, options, tenant) => {
   const request = superagent[method](url);
@@ -41,9 +41,9 @@ const createRequest = (method, url, subscriptionKey, query, data, token, options
 };
 
 export const invokeRequest = createAsyncThunk('request/invoke', async (options, thunk) => {
-  const { method, url } = options;
+  const { method, url, prefixKey } = options;
   const key = makeKey(options);
-  const APIurl = makeUrl(thunk.extra.settingsProvider, url);
+  const APIurl = makeUrl(thunk.extra.settingsProvider, prefixKey, url);
   const token = thunk.extra.sessionProvider.getToken();
   const tenant = thunk.extra.sessionProvider.getTenant();
   try {

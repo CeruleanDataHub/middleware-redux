@@ -3,11 +3,17 @@ import { invokeRequest } from './request.js';
 import dispatchThunk from '../utils.js';
 
 export const telemetryQuery = createAsyncThunk('telemetry/telemetry-query', async (data, thunk) => {
-  return await dispatchThunk(thunk, invokeRequest({ method: 'post', url: `/telemetry/query`, data: data }));
+  return await dispatchThunk(
+    thunk,
+    invokeRequest({ method: 'post', url: `/telemetry/query`, data: data, prefixKey: 'API_PREFIX' })
+  );
 });
 
 export const aggregateTelemetryQuery = createAsyncThunk('telemetry/aggregate-telemetry-query', async (data, thunk) => {
-  return await dispatchThunk(thunk, invokeRequest({ method: 'post', url: `/telemetry/query-aggregate`, data: data }));
+  return await dispatchThunk(
+    thunk,
+    invokeRequest({ method: 'post', url: `/telemetry/query-aggregate`, data: data, prefixKey: 'API_PREFIX' })
+  );
 });
 
 export const telemetrySlice = createSlice({
@@ -25,7 +31,7 @@ export const telemetrySlice = createSlice({
     },
     [aggregateTelemetryQuery.rejected]: (state, action) => {
       state.queryResult = null;
-    }
+    },
   },
 });
 
