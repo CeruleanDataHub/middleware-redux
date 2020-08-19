@@ -7,7 +7,7 @@ const makeKey = (request) => {
 
 const makeUrl = (settings, prefixKey, url) => `${settings.API_URL}${settings[prefixKey]}${url}`;
 
-const createRequest = (method, url, subscriptionKey, query, data, token, options, tenant) => {
+const createRequest = (method, url, subscriptionKey, query, data, token, idToken, options, tenant) => {
   const request = superagent[method](url);
   // Set query parameters.
   if (query !== undefined) {
@@ -17,6 +17,9 @@ const createRequest = (method, url, subscriptionKey, query, data, token, options
   // Set token if given
   if (token !== undefined) {
     request.set('Authorization', `Bearer ${token}`);
+  }
+  if (idToken !== undefined) {
+    request.set('x-cerulean-id', idToken);
   }
   if (tenant !== undefined) {
     request.set('x-cerulean-context', tenant);
@@ -45,9 +48,10 @@ export const invokeRequest = createAsyncThunk('request/invoke', async (options, 
   const key = makeKey(options);
   const APIurl = makeUrl(thunk.extra.settingsProvider, prefixKey, url);
   const token = thunk.extra.sessionProvider.getToken();
+  const idToken = thunk.extra.sessionProvider.getIdToken();
   const tenant = thunk.extra.sessionProvider.getTenant();
   try {
-    const response = await createRequest(method, APIurl, null, null, options.data, token, undefined, tenant);
+    const response = await createRequest(method, APIurl, null, null, options.data, token, idToken, undefined, tenant);
     const { body, error } = response;
     return { key, body, error };
   } catch (err) {

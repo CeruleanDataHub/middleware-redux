@@ -14,4 +14,12 @@ export class Auth0SessionProvider {
   setTenant(tenant) {
     this.tenant = tenant;
   }
+
+  getIdToken() {
+    return this.idToken;
+  }
+
+  setIdToken(idToken) {
+    this.idToken = idToken;
+  }
 }
