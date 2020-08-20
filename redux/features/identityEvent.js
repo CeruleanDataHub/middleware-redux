@@ -5,7 +5,7 @@ import dispatchThunk from '../utils.js';
 export const getLatestIdentities = createAsyncThunk(
   'identity-events/latest',
   async (_, thunk) =>
-    await dispatchThunk(thunk, invokeRequest({ method: 'get', url: '/identity-event/latest', prefixKey: 'API_PREFIX' }))
+    await dispatchThunk(thunk, invokeRequest({ method: 'get', url: '/identity-event/latest' }))
 );
 
 export const identityEventsSlice = createSlice({

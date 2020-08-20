@@ -5,14 +5,14 @@ import dispatchThunk from '../utils.js';
 export const telemetryQuery = createAsyncThunk('telemetry/telemetry-query', async (data, thunk) => {
   return await dispatchThunk(
     thunk,
-    invokeRequest({ method: 'post', url: `/telemetry/query`, data: data, prefixKey: 'API_PREFIX' })
+    invokeRequest({ method: 'post', url: `/telemetry/query`, data: data })
   );
 });
 
 export const aggregateTelemetryQuery = createAsyncThunk('telemetry/aggregate-telemetry-query', async (data, thunk) => {
   return await dispatchThunk(
     thunk,
-    invokeRequest({ method: 'post', url: `/telemetry/query-aggregate`, data: data, prefixKey: 'API_PREFIX' })
+    invokeRequest({ method: 'post', url: `/telemetry/query-aggregate`, data: data })
   );
 });
 

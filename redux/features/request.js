@@ -5,7 +5,16 @@ const makeKey = (request) => {
   return JSON.stringify(request);
 };
 
-const makeUrl = (settings, prefixKey, url) => `${settings.API_URL}${settings[prefixKey]}${url}`;
+const makeUrl = (settings, url) => {
+  let requestUrl = settings.API_URL;
+
+  if(!url.includes("/auth0/")){
+    requestUrl += settings.API_ROOT + settings.API_VERSION
+  }
+  requestUrl += url
+
+  return requestUrl;
+}
 
 const createRequest = (method, url, subscriptionKey, query, data, token, idToken, options, tenant) => {
   const request = superagent[method](url);
@@ -44,9 +53,9 @@ const createRequest = (method, url, subscriptionKey, query, data, token, idToken
 };
 
 export const invokeRequest = createAsyncThunk('request/invoke', async (options, thunk) => {
-  const { method, url, prefixKey } = options;
+  const { method, url } = options;
   const key = makeKey(options);
-  const APIurl = makeUrl(thunk.extra.settingsProvider, prefixKey, url);
+  const APIurl = makeUrl(thunk.extra.settingsProvider, url);
   const token = thunk.extra.sessionProvider.getToken();
   const idToken = thunk.extra.sessionProvider.getIdToken();
   const tenant = thunk.extra.sessionProvider.getTenant();

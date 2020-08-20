@@ -5,13 +5,13 @@ import dispatchThunk from '../utils.js';
 export const getAllHierarchies = createAsyncThunk(
   'hierarchy/get',
   async (_, thunk) =>
-    await dispatchThunk(thunk, invokeRequest({ method: 'get', url: '/hierarchy/all', prefixKey: 'API_PREFIX' }))
+    await dispatchThunk(thunk, invokeRequest({ method: 'get', url: '/hierarchy/all' }))
 );
 
 export const getHierarchyTree = createAsyncThunk(
   'hierarchy/tree',
   async (_, thunk) =>
-    await dispatchThunk(thunk, invokeRequest({ method: 'get', url: '/hierarchy/tree', prefixKey: 'API_PREFIX' }))
+    await dispatchThunk(thunk, invokeRequest({ method: 'get', url: '/hierarchy/tree' }))
 );
 
 export const findHierarchies = createAsyncThunk(
@@ -19,7 +19,7 @@ export const findHierarchies = createAsyncThunk(
   async (data, thunk) =>
     await dispatchThunk(
       thunk,
-      invokeRequest({ method: 'post', url: '/hierarchy/find-where', data: data, prefixKey: 'API_PREFIX' })
+      invokeRequest({ method: 'post', url: '/hierarchy/find-where', data: data })
     )
 );
 
@@ -28,14 +28,14 @@ export const addHierarchy = createAsyncThunk(
   async (data, thunk) =>
     await dispatchThunk(
       thunk,
-      invokeRequest({ method: 'post', url: '/hierarchy/', data: data, prefixKey: 'API_PREFIX' })
+      invokeRequest({ method: 'post', url: '/hierarchy/', data: data })
     )
 );
 
 export const deleteHierarchy = createAsyncThunk(
   'hierarchy/delete',
   async (id, thunk) =>
-    await dispatchThunk(thunk, invokeRequest({ method: 'delete', url: `/hierarchy/${id}`, prefixKey: 'API_PREFIX' }))
+    await dispatchThunk(thunk, invokeRequest({ method: 'delete', url: `/hierarchy/${id}` }))
 );
 
 export const editHierarchy = createAsyncThunk(
@@ -47,7 +47,6 @@ export const editHierarchy = createAsyncThunk(
         method: 'put',
         url: `/hierarchy/${hierarchy.id}`,
         data: { name: hierarchy.name },
-        prefixKey: 'API_PREFIX',
       })
     )
 );

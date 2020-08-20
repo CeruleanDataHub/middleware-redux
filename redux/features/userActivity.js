@@ -5,7 +5,7 @@ import dispatchThunk from '../utils.js';
 export const getLastMonthUsersKPIData = createAsyncThunk('identity-event/user-activity/last', async (data, thunk) => {
   return await dispatchThunk(
     thunk,
-    invokeRequest({ method: 'post', url: '/identity-event/user-activity', prefixKey: 'API_PREFIX', data: data })
+    invokeRequest({ method: 'post', url: '/identity-event/user-activity', data: data })
   );
 });
 
@@ -14,7 +14,7 @@ export const getCurrentMonthUsersKPIData = createAsyncThunk(
   async (data, thunk) => {
     return await dispatchThunk(
       thunk,
-      invokeRequest({ method: 'post', url: '/identity-event/user-activity', prefixKey: 'API_PREFIX', data: data })
+      invokeRequest({ method: 'post', url: '/identity-event/user-activity', data: data })
     );
   }
 );
@@ -24,7 +24,7 @@ export const getMaxUserLoginCountInADay = createAsyncThunk(
   async (_, thunk) => {
     return await dispatchThunk(
       thunk,
-      invokeRequest({ method: 'get', url: '/identity-event/day-max-login-count', prefixKey: 'API_PREFIX' })
+      invokeRequest({ method: 'get', url: '/identity-event/day-max-login-count' })
     );
   }
 );
