@@ -1,4 +1,5 @@
 import { getDefaultMiddleware } from '@reduxjs/toolkit';
+
 export {
   default as devicesReducer,
   getAllDevices,
@@ -8,6 +9,7 @@ export {
   getLastMonthDevicesKPIData,
   getCurrentMonthDevicesKPIData,
 } from './redux/features/devices.js';
+
 export {
   default as hierarchyReducer,
   getAllHierarchies,
@@ -18,8 +20,17 @@ export {
   editHierarchy,
   findHierarchies,
 } from './redux/features/hierarchy.js';
-export { default as telemetryReducer, telemetryQuery, aggregateTelemetryQuery } from './redux/features/telemetry.js';
-export { default as identityEventReducer, getLatestIdentities } from './redux/features/identityEvent.js';
+
+export {
+  default as telemetryReducer,
+  telemetryQuery,
+  aggregateTelemetryQuery,
+} from './redux/features/telemetry.js';
+
+export {
+  default as identityEventReducer,
+  getLatestIdentities,
+} from './redux/features/identityEvent.js';
 
 export {
   default as activityReducer,
@@ -27,6 +38,12 @@ export {
   getCurrentMonthUsersKPIData,
   getMaxUserLoginCountInADay,
 } from './redux/features/userActivity.js';
+
+export {
+  default as rolesReducer,
+  getAllRoles,
+  createRole,
+} from './redux/features/roles.js';
 
 export { Auth0SessionProvider } from './redux/providers/auth0SessionProvider.js';
 

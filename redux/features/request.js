@@ -8,15 +8,25 @@ const makeKey = (request) => {
 const makeUrl = (settings, url) => {
   let requestUrl = settings.API_URL;
 
-  if(!url.includes("/auth0/")){
-    requestUrl += settings.API_ROOT + settings.API_VERSION
+  if (!url.includes('/auth0/')) {
+    requestUrl += settings.API_ROOT + settings.API_VERSION;
   }
-  requestUrl += url
+  requestUrl += url;
 
   return requestUrl;
-}
+};
 
-const createRequest = (method, url, subscriptionKey, query, data, token, idToken, options, tenant) => {
+const createRequest = (
+  method,
+  url,
+  subscriptionKey,
+  query,
+  data,
+  token,
+  idToken,
+  options,
+  tenant
+) => {
   const request = superagent[method](url);
   // Set query parameters.
   if (query !== undefined) {
@@ -52,21 +62,34 @@ const createRequest = (method, url, subscriptionKey, query, data, token, idToken
   return request;
 };
 
-export const invokeRequest = createAsyncThunk('request/invoke', async (options, thunk) => {
-  const { method, url } = options;
-  const key = makeKey(options);
-  const APIurl = makeUrl(thunk.extra.settingsProvider, url);
-  const token = thunk.extra.sessionProvider.getToken();
-  const idToken = thunk.extra.sessionProvider.getIdToken();
-  const tenant = thunk.extra.sessionProvider.getTenant();
-  try {
-    const response = await createRequest(method, APIurl, null, null, options.data, token, idToken, undefined, tenant);
-    const { body, error } = response;
-    return { key, body, error };
-  } catch (err) {
-    return thunk.rejectWithValue({ key, error: err.message });
+export const invokeRequest = createAsyncThunk(
+  'request/invoke',
+  async (options, thunk) => {
+    const { method, url } = options;
+    const key = makeKey(options);
+    const APIurl = makeUrl(thunk.extra.settingsProvider, url);
+    const token = thunk.extra.sessionProvider.getToken();
+    const idToken = thunk.extra.sessionProvider.getIdToken();
+    const tenant = thunk.extra.sessionProvider.getTenant();
+    try {
+      const response = await createRequest(
+        method,
+        APIurl,
+        null,
+        null,
+        options.data,
+        token,
+        idToken,
+        undefined,
+        tenant
+      );
+      const { body, error } = response;
+      return { key, body, error };
+    } catch (err) {
+      return thunk.rejectWithValue({ key, error: err.message });
+    }
   }
-});
+);
 
 export const requestSlice = createSlice({
   name: 'requests',
