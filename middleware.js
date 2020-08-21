@@ -45,7 +45,7 @@ export {
   createRole,
   getPermissionsForRole,
   updatePermissionsForRole,
-  deletePermissionsForRole,
+  deletePermissionFromRole,
 } from './redux/features/roles.js';
 
 export {

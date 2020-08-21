@@ -46,7 +46,7 @@ export const updatePermissionsForRole = createAsyncThunk(
     )
 );
 
-export const deletePermissionsForRole = createAsyncThunk(
+export const deletePermissionFromRole = createAsyncThunk(
   'role/permissions-update',
   async ({ id, data }, thunk) =>
     await dispatchThunk(
