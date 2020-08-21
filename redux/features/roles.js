@@ -24,6 +24,15 @@ export const createRole = createAsyncThunk(
     )
 );
 
+export const deleteRole = createAsyncThunk(
+  'roles/delete',
+  async (id, thunk) =>
+    await dispatchThunk(
+      thunk,
+      invokeRequest({ method: 'delete', url: `/auth0/roles/${id}` })
+    )
+);
+
 export const getPermissionsForRole = createAsyncThunk(
   'role/permissions',
   async (id, thunk) =>

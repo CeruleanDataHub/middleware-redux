@@ -43,6 +43,7 @@ export {
   default as rolesReducer,
   getAllRoles,
   createRole,
+  deleteRole,
   getPermissionsForRole,
   updatePermissionsForRole,
   deletePermissionFromRole,
