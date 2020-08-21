@@ -48,6 +48,11 @@ export {
   deletePermissionsForRole,
 } from './redux/features/roles.js';
 
+export {
+  default as permissionsReducer,
+  getAllPermissions,
+} from './redux/features/permissions.js';
+
 export { Auth0SessionProvider } from './redux/providers/auth0SessionProvider.js';
 
 export default function (settingsProvider, cacheProvider, sessionProvider) {
