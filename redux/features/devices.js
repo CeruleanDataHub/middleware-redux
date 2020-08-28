@@ -59,7 +59,10 @@ export const devicesSlice = createSlice({
     [findDevices.fulfilled]: (state, action) => {
       state.devices = action.payload.body;
     },
-    [findDevices.rejected]: (state, action) => {
+    [findDevices.pending]: (state) => {
+      state.devices = null;
+    },
+    [findDevices.rejected]: (state) => {
       state.devices = null;
     },
     [getLastMonthDevicesKPIData.fulfilled]: (state, action) => {
