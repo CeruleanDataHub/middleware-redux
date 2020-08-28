@@ -67,7 +67,10 @@ export const hierarchiesSlice = createSlice({
     [findHierarchies.fulfilled]: (state, action) => {
       state.hierarchies = action.payload.body;
     },
-    [findHierarchies.rejected]: (state, action) => {
+    [findHierarchies.pending]: (state) => {
+      state.hierarchies = null;
+    },
+    [findHierarchies.rejected]: (state) => {
       state.hierarchies = null;
     },
     [deleteHierarchy.rejected]: (state, action) => {
