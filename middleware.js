@@ -50,6 +50,17 @@ export {
 } from './redux/features/roles.js';
 
 export {
+  default as usersReducer,
+  getUsers,
+  getRolesForUser,
+  addRoleToUser,
+  removeRoleFromUser,
+  deleteUser,
+  updateUserBlockStatus,
+  getPermissionsForUser,
+} from './redux/features/users.js';
+
+export {
   default as permissionsReducer,
   getAllPermissions,
 } from './redux/features/permissions.js';
