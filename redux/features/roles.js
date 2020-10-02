@@ -73,7 +73,7 @@ export const rolesSlice = createSlice({
   initialState: { error: undefined },
   extraReducers: {
     [getAllRoles.fulfilled]: (state, action) => {
-      state.all = action.payload.body;
+      state.allRoles = action.payload.body;
     },
     [getPermissionsForRole.pending]: (state, action) => {
       state.permissionsForActiveRole = null;

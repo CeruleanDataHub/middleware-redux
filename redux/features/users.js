@@ -23,10 +23,14 @@ export const getRolesForUser = createAsyncThunk(
 
 export const addRoleToUser = createAsyncThunk(
   'user/roles-add',
-  async ({ id, data }, thunk) =>
+  async ({ id, roles }, thunk) =>
     await dispatchThunk(
       thunk,
-      invokeRequest({ method: 'post', url: `/auth0/users/${id}/roles`, data })
+      invokeRequest({
+        method: 'post',
+        url: `/auth0/users/${id}/roles`,
+        data: { roles: [roles[0].id] },
+      })
     )
 );
 
@@ -56,7 +60,7 @@ export const updateUserBlockStatus = createAsyncThunk(
       invokeRequest({
         method: 'patch',
         url: `/auth0/users/${id}`,
-        data: blockStatus,
+        data: { blocked: blockStatus },
       })
     )
 );
@@ -75,13 +79,21 @@ export const usersSlice = createSlice({
   initialState: { error: undefined },
   extraReducers: {
     [getUsers.fulfilled]: (state, action) => {
-      state.all = getUsersOutputMapper(action.payload.body);
+      state.allUsers = getUsersOutputMapper(action.payload.body);
     },
     [getRolesForUser.fulfilled]: (state, action) => {
-      state.roles = action.payload.body;
+      state.rolesForUser = action.payload.body;
     },
     [getPermissionsForUser.fulfilled]: (state, action) => {
       state.permissions = action.payload.body;
+    },
+    [addRoleToUser.fulfilled]: (state, action) => {
+      state.rolesForUser = [...state.rolesForUser, action.meta.arg.roles[0]];
+    },
+    [removeRoleFromUser.fulfilled]: (state, action) => {
+      state.rolesForUser = state.rolesForUser.filter(
+        (role) => role.id !== action.meta.arg.data.roles[0]
+      );
     },
   },
 });
